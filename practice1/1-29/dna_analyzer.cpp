@@ -1,13 +1,29 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <fstream>
 using namespace std;
 
-int main(void){
-    string seq;
-    cout << "Enter DNA sequence:" ;
-    cin >> seq;
+//DNA sequence analyzer
+//created: 2026-02-01tugi
+//Input : sequence file(plain text or FASTA)
+//Output : length, base composition, GC content
 
+int main(void){
+    
+    ifstream ifs("genome.fasta");
+    if(!ifs){
+        cout << "Cannot open file" << endl;
+        return 1;
+    }
+
+    string seq, line;
+    while(getline(ifs, line)){
+        if(line.empty()) continue;
+        if(line[0] == '>') continue;
+        seq += line;
+    }
+    
     int A = 0, C = 0, G = 0, T = 0, N = 0;
 
     for(int i = 0; i < seq.size(); i++){
@@ -32,6 +48,8 @@ int main(void){
     double t_prob = (double)T / length * 100.0;
 
     cout << fixed << setprecision(2);
+    cout << "DNA Sequence Analyzer" << endl;
+    cout << "---------------------" << endl;
     cout << "Length:" << length << endl;
     cout << endl;
     cout << "A: " << A << "(" << a_prob << "%)" << endl;
